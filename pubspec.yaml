@@ -1,0 +1,44 @@
+name: controle_financeiro
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fl_chart: ^0.71.0
+  shared_preferences: ^2.5.3
+  intl: ^0.20.2
+  collection: ^1.19.0
+  flutter_local_notifications: 16.3.3
+  timezone: ^0.9.2
+  path_provider: ^2.0.11 # Para obter o diretório temporário
+  printing: ^5.9.3 # Para manipulação e compartilhamento de PDFs
+  pdf: ^3.6.0 # Para criação de PDFs
+  image: ^4.3.0 # Para manipulação de imagens
+  permission_handler: ^11.3.0
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/img1.png
+    - assets/img2.png
+    - assets/img3.png
+    - assets/img4.png
+    - assets/img5.png
+    - assets/img6.png
+    - assets/img7.png
+    - assets/img8.png
+    - assets/img9.png
+    - assets/img10.png
