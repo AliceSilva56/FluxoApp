@@ -369,58 +369,107 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
           const SizedBox(height: 20),
 
           // Linha com carrossel e dicas
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Carrossel de imagens
-              Expanded(
-                flex: 1,
-                child: SizedBox(
-                  height: 300,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: _imagens.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            _imagens[index],
-                            fit: BoxFit.contain,
-                            width: double.infinity,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              // Dica bônus
-              Expanded(
-                flex: 1,
-                child: Card(
+          larguraTela < 600
+    ? Column(
+        children: [
+          SizedBox(
+            height: 300,
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: _imagens.length,
+              itemBuilder: (context, index) {
+                return Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "🧠 Dica bônus: Regra dos 50-30-20",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 8),
-                        Text("50% para necessidades (aluguel, contas, comida)"),
-                        Text("30% para desejos (lazer, roupas, delivery)"),
-                        Text("20% para economia/investimentos"),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      _imagens[index],
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "🧠 Dica bônus: Regra dos 50-30-20",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text("50% para necessidades (aluguel, contas, comida)"),
+                  Text("30% para desejos (lazer, roupas, delivery)"),
+                  Text("20% para economia/investimentos"),
+                ],
+              ),
+            ),
+          ),
+        ],
+      )
+    : Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
+            child: SizedBox(
+              height: 300,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: _imagens.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        _imagens[index],
+                        fit: BoxFit.contain,
+                        width: double.infinity,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            flex: 1,
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "🧠 Dica bônus: Regra dos 50-30-20",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text("50% para necessidades (aluguel, contas, comida)"),
+                    Text("30% para desejos (lazer, roupas, delivery)"),
+                    Text("20% para economia/investimentos"),
                       ],
                     ),
                   ),
@@ -428,6 +477,7 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
               ),
             ],
           ),
+
           const SizedBox(height: 20),
 
           // Gráfico de barras dos gastos por dia

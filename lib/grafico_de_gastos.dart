@@ -222,21 +222,20 @@ class _GraficoDeGastosEstado extends State<GraficoDeGastos> {
 
           // Botões de exportar no rodapé
           Container(
-            color: const Color.fromARGB(255, 255, 255, 255),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () => exportarParaPdf(_gastos),
-                  icon: const Icon(Icons.picture_as_pdf, size: 18),
-                  label: const Text('PDF', style: TextStyle(fontSize: 14)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      ElevatedButton.icon(
+        onPressed: () => exportarParaPdf(_gastos),
+        icon: const Icon(Icons.picture_as_pdf, size: 18),
+        label: const Text('PDF', style: TextStyle(fontSize: 14)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                 ),

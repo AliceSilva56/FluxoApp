@@ -245,105 +245,127 @@ class _DetalhesGastosEstado extends State<DetalhesGastos> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final gastosFiltrados = _filtrarGastos();
-    final double total = gastosFiltrados.fold(
-      0.0,
-      (soma, gasto) => soma + (gasto['valor'] ?? 0.0),
-    );
+Widget build(BuildContext context) {
+  final gastosFiltrados = _filtrarGastos();
+  final double total = gastosFiltrados.fold(
+    0.0,
+    (soma, gasto) => soma + (gasto['valor'] ?? 0.0),
+  );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalhes dos Gastos'),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DropdownButton<String>(
-              value: _filtroClassificacao,
-              items: const [
-                DropdownMenuItem(value: null, child: Text('Todos')),
-                DropdownMenuItem(value: 'Necessidade', child: Text('Necessidade')),
-                DropdownMenuItem(value: 'Desejo', child: Text('Desejo')),
-              ],
-              onChanged: (valor) {
-                setState(() {
-                  _filtroClassificacao = valor;
-                });
-              },
-              hint: const Text('Filtrar por Classificação'),
-            ),
+  final bool isSmallScreen = MediaQuery.of(context).size.width < 360;
+
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Detalhes dos Gastos'),
+    ),
+    body: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DropdownButton<String>(
+            value: _filtroClassificacao,
+            items: const [
+              DropdownMenuItem(value: null, child: Text('Todos')),
+              DropdownMenuItem(value: 'Necessidade', child: Text('Necessidade')),
+              DropdownMenuItem(value: 'Desejo', child: Text('Desejo')),
+            ],
+            onChanged: (valor) {
+              setState(() {
+                _filtroClassificacao = valor;
+              });
+            },
+            hint: const Text('Filtrar por Classificação'),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: gastosFiltrados.length,
-              itemBuilder: (context, indice) {
-                final gasto = gastosFiltrados[indice];
-                final classificacaoCor = gasto['classificacao'] == 'Necessidade'
-                    ? Colors.blue
-                    : Colors.red;
-                final data = DateTime.tryParse(gasto['data'] ?? '');
-                final dataFormatada = data != null
-                    ? '${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year}'
-                    : 'Data inválida';
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: gastosFiltrados.length,
+            itemBuilder: (context, indice) {
+              final gasto = gastosFiltrados[indice];
+              final classificacaoCor = gasto['classificacao'] == 'Necessidade'
+                  ? Colors.blue
+                  : Colors.red;
+              final data = DateTime.tryParse(gasto['data'] ?? '');
+              final dataFormatada = data != null
+                  ? '${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year}'
+                  : 'Data inválida';
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: ListTile(
-                    onTap: () => _mostrarDetalhesGasto(gasto),
-                    title: RichText(
-                      text: TextSpan(
-                        style: DefaultTextStyle.of(context).style,
-                        children: [
-                          TextSpan(
-                            text: '${gasto['nome']} - ',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                            text: '${gasto['classificacao']}',
-                            style: TextStyle(
-                              color: classificacaoCor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Valor: R\$ ${gasto['valor'].toStringAsFixed(2)}\n'
-                      'Descrição: ${_resumirDescricao(gasto['descricao'])}\n'
-                      'Data: $dataFormatada',
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                child: ListTile(
+                  onTap: () => _mostrarDetalhesGasto(gasto),
+                  title: RichText(
+                    text: TextSpan(
+                      style: DefaultTextStyle.of(context).style,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () => _editarGasto(indice),
+                        TextSpan(
+                          text: '${gasto['nome']} - ',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _excluirGasto(indice),
+                        TextSpan(
+                          text: '${gasto['classificacao']}',
+                          style: TextStyle(
+                            color: classificacaoCor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                );
-              },
-            ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Valor: R\$ ${gasto['valor'].toStringAsFixed(2)}'),
+                      Text('Descrição: ${_resumirDescricao(gasto['descricao'])}'),
+                      Text('Data: $dataFormatada'),
+                      if (isSmallScreen)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () => _editarGasto(indice),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _excluirGasto(indice),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                  trailing: isSmallScreen
+                      ? null
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () => _editarGasto(indice),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _excluirGasto(indice),
+                            ),
+                          ],
+                        ),
+                ),
+              );
+            },
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            color: const Color.fromARGB(255, 255, 255, 255),
-            child: Text(
-              'Total: R\$ ${total.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          color: Theme.of(context).cardColor,
+          child: Text(
+            '${isSmallScreen ? 'R\$' : 'Total: R\$'} ${total.toStringAsFixed(2)}',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
+            textAlign: TextAlign.center,
             ),
           ),
         ],

@@ -133,20 +133,27 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                   decoration: const InputDecoration(labelText: 'Descrição (opcional)'),
                 ),
                 const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: _adicionarMeta,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  ),
-                  child: const Text(
-                    'Criar Meta',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isSmallScreen = constraints.maxWidth < 400;
+                    return ElevatedButton.icon(
+                      onPressed: _adicionarMeta,
+                      icon: isSmallScreen ? const Icon(Icons.add) : const SizedBox.shrink(),
+                      label: Text(
+                        isSmallScreen ? '' : 'Criar Meta',
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        minimumSize: isSmallScreen ? const Size(50, 50) : null,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -188,8 +195,11 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                             padding: EdgeInsets.only(top: 4.0),
                             child: Text('🎉 Meta concluída!', style: TextStyle(color: Colors.green)),
                           ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 4,
+                          runSpacing: 4,
+                          alignment: WrapAlignment.end,
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit, color: Colors.blue),
@@ -204,9 +214,7 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                             IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
                               tooltip: 'Excluir meta',
-                              onPressed: () {
-                                setState(() => _metas.removeAt(index));
-                              },
+                              onPressed: () => setState(() => _metas.removeAt(index)),
                             ),
                             IconButton(
                               icon: const Icon(Icons.remove, color: Colors.red),
