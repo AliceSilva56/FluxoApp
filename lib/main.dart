@@ -1,30 +1,32 @@
+// Created by [Alice Pinheiro Da Silva] on [Date].
 // Arquivo: main.dart
-import 'package:flutter/material.dart';
-import 'rastreador_de_gastos.dart';
-import 'grafico_de_gastos.dart';
-import 'detalhes_gastos.dart';
+// Descrição: Este arquivo contém a implementação do aplicativo de controle financeiro, que permite aos usuários rastrear seus gastos, visualizar gráficos e gerenciar metas financeiras.
+import 'package:flutter/material.dart'; // ⬅️ importa o pacote Flutter
+import 'rastreador_de_gastos.dart'; // ⬅️ importa o arquivo de rastreador de gastos
+import 'grafico_de_gastos.dart'; // ⬅️ importa o arquivo de gráfico de gastos
+import 'detalhes_gastos.dart'; // ⬅️ importa o arquivo de detalhes dos gastos
 import 'metas_financeiras.dart'; // ⬅️ Importa o arquivo de metas
 import 'notificacoes.dart'; // ⬅️ Importa o arquivo de notificações
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificacaoService.inicializarNotificacoes(); // ⬅️ Ativa notificações
-  runApp(const AplicativoPrincipal());
+  runApp(const AplicativoPrincipal()); // ⬅️ Executa o aplicativo
 }
 
 // Classe principal do aplicativo
 class AplicativoPrincipal extends StatelessWidget {
-  const AplicativoPrincipal({super.key});
+  const AplicativoPrincipal({super.key}); // ⬅️ Construtor da classe
 
   @override
    Widget build(BuildContext context) {
     return MaterialApp(
-  title: 'Controle Financeiro',
+  title: 'Controle Financeiro', // ⬅️ Título do aplicativo
   debugShowCheckedModeBanner: false, // Remove o banner de debug
   theme: ThemeData(
-    brightness: Brightness.light,
-    primarySwatch: Colors.blue,
-    scaffoldBackgroundColor: Colors.white,
+    brightness: Brightness.light, 
+    primarySwatch: Colors.blue, 
+    scaffoldBackgroundColor: Colors.white, 
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.blue,
       foregroundColor: Colors.white,

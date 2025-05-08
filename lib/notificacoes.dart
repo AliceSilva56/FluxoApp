@@ -1,4 +1,6 @@
+// Created by [Alice Pinheiro Da Silva] on [Date].
 // Arquivo: notificacoes.dart
+// Descrição: Este arquivo contém a implementação do serviço de notificações, que permite agendar e mostrar notificações no dispositivo do usuário.
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;

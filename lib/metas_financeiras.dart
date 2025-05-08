@@ -1,3 +1,6 @@
+// Created by [Alice Pinheiro Da Silva] on [Date].
+//Arquivo: metas_financeiras.dart
+//Descrição: Este arquivo contém a implementação da página de Metas Financeiras, que permite aos usuários gerenciar suas metas financeiras.
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -21,6 +24,8 @@ class MetaFinanceira {
   bool get concluida => valorAtual >= valorAlvo;
   double get progresso => valorAtual / valorAlvo;
   double get valorRestante => valorAlvo - valorAtual;
+  bool get quaseConcluida => progresso >= 0.75 && !concluida;
+  bool get parada => DateTime.now().difference(dataCriacao).inDays > 30 && valorAtual == 0;
 }
 
 class MetasFinanceirasPage extends StatefulWidget {
@@ -35,9 +40,33 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
   final _valorAlvoController = TextEditingController();
   final _descricaoController = TextEditingController();
 
+  bool _conquistaCriou3Metas = false;
+  bool _conquistaConcluiuUmaMeta = false;
+
   String capitalizar(String texto) {
     if (texto.isEmpty) return '';
     return texto[0].toUpperCase() + texto.substring(1);
+  }
+
+  void _checarConquistas() {
+    if (!_conquistaCriou3Metas && _metas.length >= 3) {
+      _conquistaCriou3Metas = true;
+      _mostrarConquista('🏆 Criou 3 metas!');
+    }
+    if (!_conquistaConcluiuUmaMeta && _metas.any((m) => m.concluida)) {
+      _conquistaConcluiuUmaMeta = true;
+      _mostrarConquista('🎯 Concluiu sua primeira meta!');
+    }
+  }
+
+  void _mostrarConquista(String texto) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(texto),
+        backgroundColor: Colors.amber,
+        duration: Duration(seconds: 3),
+      ),
+    );
   }
 
   void _adicionarMeta() {
@@ -54,6 +83,7 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
         descricao: descricao,
         dataCriacao: DateTime.now(),
       ));
+      _checarConquistas();
     });
 
     _nomeController.clear();
@@ -87,13 +117,11 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                     if (adicionar) {
                       _metas[index].valorAtual += valor;
                     } else {
-                      _metas[index].valorAtual -= valor;
-                      if (_metas[index].valorAtual < 0) {
-                        _metas[index].valorAtual = 0;
-                      }
+                      _metas[index].valorAtual = (_metas[index].valorAtual - valor).clamp(0.0, double.infinity);
                     }
                     if (_metas[index].concluida) {
                       _metas[index].dataConclusao = DateTime.now();
+                      _checarConquistas();
                     }
                   });
                 }
@@ -105,6 +133,19 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
         );
       },
     );
+  }
+
+  Color _getCardColor(BuildContext context, MetaFinanceira meta) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (meta.concluida) {
+      return isDark ? Colors.green.shade700 : Colors.green.shade100;
+    } else if (meta.quaseConcluida) {
+      return isDark ? Colors.yellow.shade800 : Colors.yellow.shade100;
+    } else if (meta.parada) {
+      return isDark ? Colors.grey.shade800 : Colors.grey.shade300;
+    } else {
+      return Theme.of(context).cardColor;
+    }
   }
 
   @override
@@ -133,27 +174,15 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                   decoration: const InputDecoration(labelText: 'Descrição (opcional)'),
                 ),
                 const SizedBox(height: 8),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final isSmallScreen = constraints.maxWidth < 400;
-                    return ElevatedButton.icon(
-                      onPressed: _adicionarMeta,
-                      icon: isSmallScreen ? const Icon(Icons.add) : const SizedBox.shrink(),
-                      label: Text(
-                        isSmallScreen ? '' : 'Criar Meta',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        minimumSize: isSmallScreen ? const Size(50, 50) : null,
-                      ),
-                    );
-                  },
+                ElevatedButton(
+                  onPressed: _adicionarMeta,
+                  child: const Text('Criar Meta', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  ),
                 ),
               ],
             ),
@@ -164,7 +193,9 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
               itemCount: _metas.length,
               itemBuilder: (context, index) {
                 final meta = _metas[index];
+
                 return Card(
+                  color: _getCardColor(context, meta),
                   margin: const EdgeInsets.all(8),
                   elevation: 4,
                   child: Padding(
@@ -172,14 +203,20 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          meta.nome,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              meta.nome,
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            if (meta.concluida)
+                              const Icon(Icons.emoji_events, color: Colors.green)
+                          ],
                         ),
                         const SizedBox(height: 4),
                         Text('Criada em: ${formatador.format(meta.dataCriacao)}'),
-                        if (meta.descricao.isNotEmpty)
-                          Text('📌 ${meta.descricao}'),
+                        if (meta.descricao.isNotEmpty) Text('📌 ${meta.descricao}'),
                         const SizedBox(height: 8),
                         Text('Progresso: R\$ ${meta.valorAtual.toStringAsFixed(2)} / R\$ ${meta.valorAlvo.toStringAsFixed(2)}'),
                         Text('Faltam: R\$ ${meta.valorRestante > 0 ? meta.valorRestante.toStringAsFixed(2) : '0.00'}'),
@@ -214,7 +251,28 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                             IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
                               tooltip: 'Excluir meta',
-                              onPressed: () => setState(() => _metas.removeAt(index)),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Confirmar Exclusão'),
+                                    content: const Text('Tem certeza que deseja excluir esta meta?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: const Text('Cancelar'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          setState(() => _metas.removeAt(index));
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Excluir', style: TextStyle(color: Colors.red)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                             IconButton(
                               icon: const Icon(Icons.remove, color: Colors.red),

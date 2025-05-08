@@ -1,3 +1,6 @@
+// Created by [Alice Pinheiro Da Silva] on [Date].
+//Arquivo: detalhes_gastos.dart
+//Descrição: Este arquivo contém a implementação da página de Detalhes dos Gastos, que permite aos usuários visualizar e gerenciar seus gastos financeiros.
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -174,15 +177,15 @@ class _DetalhesGastosEstado extends State<DetalhesGastos> {
         return AlertDialog(
           backgroundColor: isNecessidade ? Colors.lightBlue : Colors.red,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Descrição do Gasto"),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-          ),
+  children: [
+    const Expanded(child: Text("Descrição do Gasto")),
+    IconButton(
+      icon: const Icon(Icons.close),
+      onPressed: () => Navigator.of(context).pop(),
+    ),
+  ],
+),
+
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
