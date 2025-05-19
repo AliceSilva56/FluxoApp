@@ -1,4 +1,4 @@
-// Created by [Alice Pinheiro Da Silva] on [Date].
+// Created by [Alice Pinheiro Da Silva].
 // Arquivo: rastreador_de_gastos.dart
 // Descrição: Este arquivo contém a implementação da página de Rastreador de Gastos, que permite aos usuários registrar e visualizar seus gastos.
 import 'package:flutter/material.dart';
@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'notificacoes.dart';
+
 
 class RastreadorDeGastos extends StatefulWidget {
   @override
@@ -34,7 +35,6 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
     'Sun': 'Dom',
   };
 
-  final List<String> _diasIngles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   final List<String> _imagens = [
     'assets/img1.png', 'assets/img2.png', 'assets/img3.png', 'assets/img4.png',
     'assets/img5.png', 'assets/img6.png', 'assets/img7.png', 'assets/img8.png',

@@ -1,4 +1,4 @@
-// Created by [Alice Pinheiro Da Silva] on [Date].
+// Created by [Alice Pinheiro Da Silva]
 // Arquivo: grafico_de_gasto.dart
 // Descrição: Este arquivo contém a implementação da página de Gráficos de Gastos, que permite aos usuários visualizar seus gastos em gráficos.
 // Importações necessárias
@@ -7,6 +7,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'exportar_utils.dart';
+import 'notificacoes.dart';
+import 'conquistas_service.dart';
 
 class GraficoDeGastos extends StatefulWidget {
   const GraficoDeGastos({super.key});

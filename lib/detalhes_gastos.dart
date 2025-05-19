@@ -1,4 +1,4 @@
-// Created by [Alice Pinheiro Da Silva] on [Date].
+// Created by [Alice Pinheiro Da Silva].
 //Arquivo: detalhes_gastos.dart
 //Descrição: Este arquivo contém a implementação da página de Detalhes dos Gastos, que permite aos usuários visualizar e gerenciar seus gastos financeiros.
 import 'package:flutter/material.dart';

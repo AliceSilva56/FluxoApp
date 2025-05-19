@@ -1,6 +1,6 @@
-// Created by [Alice Pinheiro Da Silva] on [Date].
-//Arquivo: detalhes_gastos.dart
-//Descrição: Este arquivo contém a implementação da página de Detalhes dos Gastos, que permite aos usuários visualizar e gerenciar seus gastos financeiros.
+// Created by [Alice Pinheiro Da Silva].
+//Arquivo: conquista_service.dart
+//Descrição: Este arquivo contém a implementação do serviço de conquistas, que permite adicionar e verificar conquistas do usuário.
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConquistasService {

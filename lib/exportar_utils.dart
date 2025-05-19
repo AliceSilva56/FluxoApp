@@ -1,11 +1,14 @@
-// Arquivo: rastreador_de_gastos.dart
-import 'dart:ui';
-import 'package:flutter/rendering.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
-import 'package:fl_chart/fl_chart.dart';
+// Created by [Alice Pinheiro Da Silva].
+// Arquivo: export_ultls.dart
+// Descrição: Função para exportar dados de gastos para um arquivo PDF
+
+import 'dart:ui'; // Importação de UI para manipulação de imagens
+import 'package:flutter/rendering.dart'; // Importação de RenderRepaintBoundary
+import 'package:pdf/widgets.dart' as pw; // Importação do pacote pdf
+import 'package:printing/printing.dart'; // Importação do pacote de impressão
+import 'package:fl_chart/fl_chart.dart'; // Importação do fl_chart para gráficos
 import 'package:flutter/material.dart'; // Importação correta de Color
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart'; // Importação de intl para formatação de data
 
 
 Future<void> exportarParaPdf(List<Map<String, dynamic>> gastos) async {
