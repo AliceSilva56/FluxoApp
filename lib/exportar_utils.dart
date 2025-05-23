@@ -3,6 +3,7 @@
 // Descrição: Função para exportar dados de gastos para um arquivo PDF
 
 import 'dart:ui'; // Importação de UI para manipulação de imagens
+import 'package:flutter/material.dart'; // Importação de Material Design
 import 'package:flutter/rendering.dart'; // Importação de RenderRepaintBoundary
 import 'package:pdf/widgets.dart' as pw; // Importação do pacote pdf
 import 'package:printing/printing.dart'; // Importação do pacote de impressão
@@ -10,56 +11,26 @@ import 'package:fl_chart/fl_chart.dart'; // Importação do fl_chart para gráfi
 import 'package:flutter/material.dart'; // Importação correta de Color
 import 'package:intl/intl.dart'; // Importação de intl para formatação de data
 
-
-Future<void> exportarParaPdf(List<Map<String, dynamic>> gastos) async {
+Future<void> exportarParaPdf(
+  List<Map<String, dynamic>> gastos, {
+  double? totalAtual,
+  double? totalAnterior,
+  double? diferenca,
+  String? maisGasta,
+  String? periodo,
+}) async {
   final pdf = pw.Document();
 
   // Dados de gastos para o gráfico de pizza
   double gastosNecessidade = 0;
   double gastosDesejo = 0;
-  
+
   for (var gasto in gastos) {
-    if (gasto['classificacao'] == 'necessidade') {
+    if ((gasto['classificacao'] as String).toLowerCase() == 'necessidade') {
       gastosNecessidade += gasto['valor'];
-    } else if (gasto['classificacao'] == 'desejo') {
+    } else if ((gasto['classificacao'] as String).toLowerCase() == 'desejo') {
       gastosDesejo += gasto['valor'];
     }
-  }
-
-  // Gerar gráfico de pizza
-  final chart = PieChart(
-    PieChartData(
-      sections: [
-        PieChartSectionData(value: gastosNecessidade, color: Color(0xFF4CAF50), title: 'Necessidades'),
-        PieChartSectionData(value: gastosDesejo, color: Color(0xFFFF5722), title: 'Desejos'),
-      ],
-    ),
-  );
-
-  // Criar imagem do gráfico
-  final repaintBoundary = RepaintBoundary(
-    child: SizedBox(
-      width: 300,
-      height: 300,
-      child: chart,
-    ),
-  );
-
-  final boundaryKey = GlobalKey();
-  final boundaryWidget = RepaintBoundary(
-    key: boundaryKey,
-    child: repaintBoundary,
-  );
-
-  final boundaryContext = boundaryKey.currentContext;
-  pw.MemoryImage? pdfImage;
-  if (boundaryContext != null) {
-    final boundary = boundaryContext.findRenderObject() as RenderRepaintBoundary;
-    final image = await boundary.toImage(pixelRatio: 3.0);
-    final byteData = await image.toByteData(format: ImageByteFormat.png);
-    final imageBytes = byteData!.buffer.asUint8List();
-
-    pdfImage = pw.MemoryImage(imageBytes);
   }
 
   // Função para formatar a data
@@ -67,12 +38,34 @@ Future<void> exportarParaPdf(List<Map<String, dynamic>> gastos) async {
     return DateFormat('dd/MM/yyyy - HH:mm').format(data);
   }
 
-  // Adicionar gráfico ao PDF
+  // Adicionar conteúdo ao PDF
   pdf.addPage(
     pw.MultiPage(
       build: (context) => [
         pw.Text('Relatório de Gastos', style: pw.TextStyle(fontSize: 24)),
         pw.SizedBox(height: 16),
+
+        // RESUMO CARD
+        if (totalAtual != null && totalAnterior != null && diferenca != null && maisGasta != null)
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                if (periodo != null)
+                  pw.Text('Período: $periodo', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text('Total gasto: R\$ ${totalAtual.toStringAsFixed(2)}'),
+                pw.Text('Categoria mais gasta: $maisGasta'),
+                pw.Text(
+                  'Diferença em relação ao período anterior: R\$ ${diferenca.abs().toStringAsFixed(2)}'
+                  '${diferenca > 0 ? " a mais" : " a menos"}',
+                ),
+              ],
+            ),
+          ),
+        if (totalAtual != null) pw.SizedBox(height: 16),
+
+        // TABELA DE GASTOS
         pw.Table.fromTextArray(
           headers: ['Nome', 'Valor', 'Classificação', 'Descrição', 'Data'],
           data: gastos.map((g) {
@@ -87,9 +80,6 @@ Future<void> exportarParaPdf(List<Map<String, dynamic>> gastos) async {
             ];
           }).toList(),
         ),
-        pw.SizedBox(height: 16),
-        pw.Text('', style: pw.TextStyle(fontSize: 18)),
-        if (pdfImage != null) pw.Image(pdfImage),
       ],
     ),
   );

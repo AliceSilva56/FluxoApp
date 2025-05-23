@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'notificacoes.dart';
 
-
 class RastreadorDeGastos extends StatefulWidget {
   @override
   _RastreadorDeGastosEstado createState() => _RastreadorDeGastosEstado();
@@ -21,18 +20,15 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
   final TextEditingController _controladorValor = TextEditingController();
   final TextEditingController _controladorDescricao = TextEditingController();
   String? _classificacaoSelecionada;
+  String? _formaPagamentoSelecionada; // novo campo
   String? _erroNome;
   String? _erroValor;
   String? _erroClassificacao;
+  String? _erroFormaPagamento; // novo erro
 
   final Map<String, String> _diasPt = {
-    'Mon': 'Seg',
-    'Tue': 'Ter',
-    'Wed': 'Qua',
-    'Thu': 'Qui',
-    'Fri': 'Sex',
-    'Sat': 'Sáb',
-    'Sun': 'Dom',
+    'Mon': 'Seg', 'Tue': 'Ter', 'Wed': 'Qua', 'Thu': 'Qui',
+    'Fri': 'Sex', 'Sat': 'Sáb', 'Sun': 'Dom',
   };
 
   final List<String> _imagens = [
@@ -76,8 +72,7 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
       });
     }
     await NotificacaoService.agendarNotificacaoSemanal(
-      'Resumo Semanal',
-      'Veja quanto você gastou com desejos essa semana!',
+      'Resumo Semanal', 'Veja quanto você gastou com desejos essa semana!',
     );
   }
 
@@ -94,17 +89,18 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
 
     setState(() {
       _erroNome = nome.isEmpty ? 'Preencha o nome do gasto' : null;
-      _erroValor = valor == null ? 'Preencha um valor válido' : null;
+      _erroValor = (valor == null || valor <= 0) ? 'Insira um valor maior que zero' : null;
       _erroClassificacao = _classificacaoSelecionada == null ? 'Selecione uma classificação' : null;
+      _erroFormaPagamento = _formaPagamentoSelecionada == null ? 'Selecione forma de pagamento' : null;
     });
-
-    if (_erroNome != null || _erroValor != null || _erroClassificacao != null) return;
+    if (_erroNome != null || _erroValor != null || _erroClassificacao != null || _erroFormaPagamento != null) return;
 
     setState(() {
       _gastos.add({
         'nome': nome[0].toUpperCase() + nome.substring(1),
         'valor': valor,
         'classificacao': _classificacaoSelecionada,
+        'formaPagamento': _formaPagamentoSelecionada, // novo
         'descricao': descricao,
         'data': DateTime.now().toIso8601String(),
       });
@@ -112,15 +108,14 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
       _controladorValor.clear();
       _controladorDescricao.clear();
       _classificacaoSelecionada = null;
+      _formaPagamentoSelecionada = null;
       _salvarGastos();
 
       final totalDesejo = _gastos.where((g) => g['classificacao'] == 'Desejo')
         .fold(0.0, (soma, g) => soma + g['valor']);
-
       if (totalDesejo > 100) {
         NotificacaoService.mostrarNotificacao(
-          'Atenção!',
-          'Você já gastou R\$ ${totalDesejo.toStringAsFixed(2)} em desejos.',
+          'Atenção!', 'Você já gastou R\$ ${totalDesejo.toStringAsFixed(2)} em desejos.',
         );
       }
     });
@@ -128,7 +123,7 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Gasto adicionado, mais informações em detalhes'),
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 2),
       ),
     );
   }
@@ -168,8 +163,7 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
                       child: TextField(
                         controller: _controladorNome,
                         decoration: InputDecoration(
-                          labelText: 'Nome do Gasto',
-                          errorText: _erroNome,
+                          labelText: 'Nome do Gasto', errorText: _erroNome,
                         ),
                       ),
                     ),
@@ -183,8 +177,7 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
                         ],
                         onChanged: (valor) => setState(() => _classificacaoSelecionada = valor),
                         decoration: InputDecoration(
-                          labelText: 'Classificação',
-                          errorText: _erroClassificacao,
+                          labelText: 'Classificação', errorText: _erroClassificacao,
                         ),
                       ),
                     ),
@@ -197,10 +190,25 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
                       child: TextField(
                         controller: _controladorValor,
                         decoration: InputDecoration(
-                          labelText: 'Valor do Gasto',
-                          errorText: _erroValor,
+                          labelText: 'Valor do Gasto', errorText: _erroValor,
                         ),
                         keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      width: 150,
+                      child: DropdownButtonFormField<String>(
+                        value: _formaPagamentoSelecionada,
+                        items: const [
+                          DropdownMenuItem(value: 'cartao', child: Text('💳 Cartão')),
+                          DropdownMenuItem(value: 'dinheiro', child: Text('💵 Dinheiro')),
+                          DropdownMenuItem(value: 'parcelado', child: Text('📅 Parcelado')),
+                        ],
+                        onChanged: (valor) => setState(() => _formaPagamentoSelecionada = valor),
+                        decoration: InputDecoration(
+                          labelText: 'Pagto.', errorText: _erroFormaPagamento,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -227,7 +235,7 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
             ),
           ),
 
-          // Parte rolável
+    // Parte rolável
           Expanded(
             child: SingleChildScrollView(
               child: Column(
