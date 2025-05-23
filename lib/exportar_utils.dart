@@ -2,13 +2,8 @@
 // Arquivo: export_ultls.dart
 // Descrição: Função para exportar dados de gastos para um arquivo PDF
 
-import 'dart:ui'; // Importação de UI para manipulação de imagens
-import 'package:flutter/material.dart'; // Importação de Material Design
-import 'package:flutter/rendering.dart'; // Importação de RenderRepaintBoundary
 import 'package:pdf/widgets.dart' as pw; // Importação do pacote pdf
 import 'package:printing/printing.dart'; // Importação do pacote de impressão
-import 'package:fl_chart/fl_chart.dart'; // Importação do fl_chart para gráficos
-import 'package:flutter/material.dart'; // Importação correta de Color
 import 'package:intl/intl.dart'; // Importação de intl para formatação de data
 
 Future<void> exportarParaPdf(
@@ -60,6 +55,9 @@ Future<void> exportarParaPdf(
                   'Diferença em relação ao período anterior: R\$ ${diferenca.abs().toStringAsFixed(2)}'
                   '${diferenca > 0 ? " a mais" : " a menos"}',
                 ),
+                pw.SizedBox(height: 8),
+                pw.Text('Total Necessidades: R\$ ${gastosNecessidade.toStringAsFixed(2)}'),
+                pw.Text('Total Desejos: R\$ ${gastosDesejo.toStringAsFixed(2)}'),
               ],
             ),
           ),

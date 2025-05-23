@@ -9,10 +9,10 @@ class DetalhesGastos extends StatefulWidget {
   const DetalhesGastos({super.key});
 
   @override
-  _DetalhesGastosEstado createState() => _DetalhesGastosEstado();
+  DetalhesGastosEstado createState() => DetalhesGastosEstado();
 }
 
-class _DetalhesGastosEstado extends State<DetalhesGastos> {
+class DetalhesGastosEstado extends State<DetalhesGastos> {
   List<Map<String, dynamic>> _gastos = [];
   String? _filtroClassificacao;
   String _buscaTexto = '';
@@ -304,6 +304,18 @@ class _DetalhesGastosEstado extends State<DetalhesGastos> {
                       IconButton(icon: const Icon(Icons.clear), onPressed: () => setState(() => _filtroData = null)),
                   ],
                 ),
+                // Exibe o total filtrado
+                if (gastosFiltrados.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Total filtrado: R\$ ${total.toStringAsFixed(2)}',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

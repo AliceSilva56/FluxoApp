@@ -6,17 +6,15 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'exportar_utils.dart';
-import 'notificacoes.dart';
-import 'conquistas_service.dart';
 
 class GraficoDeGastos extends StatefulWidget {
   const GraficoDeGastos({super.key});
 
   @override
-  _GraficoDeGastosEstado createState() => _GraficoDeGastosEstado();
+  GraficoDeGastosEstado createState() => GraficoDeGastosEstado();
 }
 
-class _GraficoDeGastosEstado extends State<GraficoDeGastos> {
+class GraficoDeGastosEstado extends State<GraficoDeGastos> {
   String _periodoSelecionado = 'Mensal';
   List<Map<String, dynamic>> _gastos = [];
 

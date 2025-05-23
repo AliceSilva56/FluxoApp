@@ -8,7 +8,7 @@ import 'conquistas_service.dart'; // Importação do serviço de conquistas
 
 class PerfilPage extends StatefulWidget {
   final Function(ThemeMode) onThemeChanged;
-  const PerfilPage({Key? key, required this.onThemeChanged}) : super(key: key);
+  const PerfilPage({super.key, required this.onThemeChanged});
 
   @override
   State<PerfilPage> createState() => _PerfilPageState();
@@ -90,7 +90,7 @@ class _PerfilPageState extends State<PerfilPage> with AutomaticKeepAliveClientMi
               ),
             ],
           ),
-           const SizedBox(height: 32),
+          const SizedBox(height: 32),
           const Text(
             'Conquistas',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -99,12 +99,9 @@ class _PerfilPageState extends State<PerfilPage> with AutomaticKeepAliveClientMi
           Wrap(
             spacing: 16,
             runSpacing: 16,
-            children: [
-              _buildTrofeu('primeiro_gasto', 'Primeiro Gasto Registrado'),
-              _buildTrofeu('meta_atingida', 'Primeira Meta Atingida'),
-              _buildTrofeu('semana_economica', 'Semana Econômica'),
-              _buildTrofeu('exportou_dados', 'Exportou para PDF'),
-            ],
+            children: _objetivos
+                .map((obj) => _buildTrofeu(obj['id']!, obj['descricao']!))
+                .toList(),
           ),
         ],
       ),
