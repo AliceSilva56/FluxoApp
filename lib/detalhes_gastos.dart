@@ -112,6 +112,7 @@ class DetalhesGastosEstado extends State<DetalhesGastos> {
                     DropdownMenuItem(value: 'cartao', child: Text('💳 Cartão')),
                     DropdownMenuItem(value: 'dinheiro', child: Text('💵 Dinheiro')),
                     DropdownMenuItem(value: 'parcelado', child: Text('📅 Parcelado')),
+                    //DropdownMenuItem(value: 'pix', child: Text('🅿️ PIx')),
                   ],
                   onChanged: (v) => formaSelecionada = v,
                   decoration: const InputDecoration(labelText: 'Forma de Pagamento'),
@@ -366,3 +367,18 @@ class DetalhesGastosEstado extends State<DetalhesGastos> {
     );
   }
 }
+// descrição: Este arquivo contém a implementação da página de Detalhes dos Gastos, que permite aos usuários visualizar e gerenciar seus gastos financeiros.
+// O código inclui funcionalidades para filtrar, buscar, editar e excluir gastos, além de exibir detalhes de cada gasto em um diálogo.
+// O uso de SharedPreferences permite persistir os dados dos gastos entre as sessões do aplicativo.
+// A interface é responsiva, adaptando-se a diferentes tamanhos de tela, e inclui recursos de acessibilidade como ícones e cores para facilitar a identificação dos tipos de gastos.
+// O código também inclui uma função para formatar a data e exibir informações adicionais sobre cada gasto, como classificação e forma de pagamento.
+// O design é simples e intuitivo, visando proporcionar uma boa experiência ao usuário ao gerenciar suas finanças pessoais.
+// O código é modular e organizado, facilitando a manutenção e futuras expansões da funcionalidade.
+// O uso de widgets como ListView, Card e AlertDialog contribui para uma interface amigável e fácil de navegar.
+// O código segue as boas práticas de desenvolvimento Flutter, utilizando stateful widgets para gerenciar o estado da aplicação e atualizando a interface de forma eficiente.
+// O arquivo é parte de um aplicativo maior que visa ajudar os usuários a controlar seus gastos e finanças pessoais de forma eficaz e prática.
+// O código é escrito em Dart e utiliza o framework Flutter, conhecido por sua capacidade de criar interfaces de usuário nativas e responsivas para aplicativos móveis.
+// O arquivo é bem documentado, com comentários explicativos que ajudam a entender a lógica e o fluxo do código, tornando-o acessível para desenvolvedores de diferentes níveis de experiência.
+// O código é otimizado para desempenho, evitando operações desnecessárias e garantindo que a interface permaneça responsiva mesmo com um grande número de gastos.
+// O arquivo é parte de um projeto maior que visa ajudar os usuários a controlar seus gastos e finanças pessoais de forma eficaz e prática.
+// O código é escrito em Dart e utiliza o framework Flutter, conhecido por sua capacidade de criar interfaces de usuário nativas e responsivas para aplicativos móveis.
