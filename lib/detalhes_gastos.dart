@@ -66,6 +66,7 @@ class DetalhesGastosEstado extends State<DetalhesGastos> {
       case 'cartao': return '💳';
       case 'dinheiro': return '💵';
       case 'parcelado': return '📅';
+      case 'pix': return '🅿️';
       default: return '';
     }
   }
@@ -112,7 +113,7 @@ class DetalhesGastosEstado extends State<DetalhesGastos> {
                     DropdownMenuItem(value: 'cartao', child: Text('💳 Cartão')),
                     DropdownMenuItem(value: 'dinheiro', child: Text('💵 Dinheiro')),
                     DropdownMenuItem(value: 'parcelado', child: Text('📅 Parcelado')),
-                    //DropdownMenuItem(value: 'pix', child: Text('🅿️ PIx')),
+                    DropdownMenuItem(value: 'pix', child: Text('🅿️ PIx')),
                   ],
                   onChanged: (v) => formaSelecionada = v,
                   decoration: const InputDecoration(labelText: 'Forma de Pagamento'),

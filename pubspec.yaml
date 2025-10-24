@@ -22,6 +22,7 @@ dependencies:
   image: ^4.3.0 # Para manipulação de imagens
   permission_handler: ^11.3.0 # Para solicitar permissões
   open_file: ^3.4.6 # Para abrir arquivos
+  url_launcher: ^6.3.0 # Para abrir links externos (GitHub, Instagram)
 
 
 

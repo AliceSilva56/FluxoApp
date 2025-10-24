@@ -204,7 +204,7 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
                           DropdownMenuItem(value: 'cartao', child: Text('💳 Cartão')),
                           DropdownMenuItem(value: 'dinheiro', child: Text('💵 Dinheiro')),
                           DropdownMenuItem(value: 'parcelado', child: Text('📅 Parcelado')),
-                          //DropdownMenuItem(value: 'pix', child: Text('🅿️ PIx')),
+                          DropdownMenuItem(value: 'pix', child: Text('🅿️ Pix')),
                         ],
                         onChanged: (valor) => setState(() => _formaPagamentoSelecionada = valor),
                         decoration: InputDecoration(
