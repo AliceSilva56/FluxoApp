@@ -62,9 +62,6 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
   final _valorAlvoController = TextEditingController();
   final _descricaoController = TextEditingController();
 
-  bool _conquistaCriou3Metas = false;
-  bool _conquistaConcluiuUmaMeta = false;
-
   @override
   void initState() {
     super.initState();
@@ -90,29 +87,8 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
   }
 
   String capitalizar(String texto) {
-    if (texto.isEmpty) return '';
+    if (texto.isEmpty) return texto;
     return texto[0].toUpperCase() + texto.substring(1);
-  }
-
-  void _checarConquistas() {
-    if (!_conquistaCriou3Metas && _metas.length >= 3) {
-      _conquistaCriou3Metas = true;
-      _mostrarConquista('🏆 Criou 3 metas!');
-    }
-    if (!_conquistaConcluiuUmaMeta && _metas.any((m) => m.concluida)) {
-      _conquistaConcluiuUmaMeta = true;
-      _mostrarConquista('🎯 Concluiu sua primeira meta!');
-    }
-  }
-
-  void _mostrarConquista(String texto) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(texto),
-        backgroundColor: Colors.amber,
-        duration: const Duration(seconds: 3),
-      ),
-    );
   }
 
   void _adicionarMeta() {
@@ -128,7 +104,6 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
           descricao: descricao,
           dataCriacao: DateTime.now(),
         ));
-        _checarConquistas();
         _salvarMetas();
       });
 
@@ -165,7 +140,6 @@ class _MetasFinanceirasPageState extends State<MetasFinanceirasPage> {
                   }
                   if (_metas[index].concluida) {
                     _metas[index].dataConclusao = DateTime.now();
-                    _checarConquistas();
                   }
                   _salvarMetas();
                 });

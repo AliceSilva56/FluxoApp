@@ -32,9 +32,9 @@ class _RastreadorDeGastosEstado extends State<RastreadorDeGastos> {
   };
 
   final List<String> _imagens = [
-    'assets/img1.png', 'assets/img2.png', 'assets/img3.png', 'assets/img4.png',
-    'assets/img5.png', 'assets/img6.png', 'assets/img7.png', 'assets/img8.png',
-    'assets/img9.png', 'assets/img10.png'
+    'assets/assets/imgPt/1.png', 'assets/assets/imgPt/2.png', 'assets/assets/imgPt/3.png', 'assets/assets/imgPt/4.png',
+    'assets/assets/imgPt/5.png', 'assets/assets/imgPt/6.png', 'assets/assets/imgPt/7.png', 'assets/assets/imgPt/8.png',
+    'assets/assets/imgPt/9.png', 'assets/assets/imgPt/10.png'
   ];
 
   late PageController _pageController;
